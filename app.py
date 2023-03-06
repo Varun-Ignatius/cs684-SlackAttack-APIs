@@ -3,10 +3,12 @@ from flask import Flask,request,jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from sqlalchemy import extract
+from flask_cors import CORS
 
 
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://o2oqb95gqjltq49y25jo:pscale_pw_Lhs7iI5zynFOD9WNbkqJP5CI7getwJwq8EwAwImVAvZ@us-east.connect.psdb.cloud/slackattack-news-usersdatabase?ssl=true'
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
