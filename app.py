@@ -128,8 +128,11 @@ def updateCategories(userName):
         user.sports = request.json['sports']
         user.technology = request.json['technology']
         db.session.commit()
+        updatedUser = User.query.get(userName)
+        result = user_Category_Schema.dump(updatedUser)
         return jsonify({"Code": 200,
-        "Message": "Valid Username"}) 
+        "Message": "Valid Username",
+        "data":result}) 
     else:
         return jsonify({"Code": 401,
         "Message": "Invalid UserName"}) 
