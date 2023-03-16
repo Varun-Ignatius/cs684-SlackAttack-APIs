@@ -88,11 +88,19 @@ def signUp():
 
 @app.route("/News/<string:userName>", methods = ['GET'])
 def news(userName):
-   if userName == "noUser":
-      response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category=general&apiKey=4ae22761ac7c4d698eff795df06742f0')
-   else:
+   user = User.query.get(userName)
+  
+   result = user_Category_Schema.dump(user)
+   if len(result):
       response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4ae22761ac7c4d698eff795df06742f0')
-   return response.json()
+      return response.json()
+   elif userName == "noUser":
+      response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category=general&apiKey=4ae22761ac7c4d698eff795df06742f0')
+      return response.json()
+   else:
+       return jsonify({"Code": 401,
+        "Message": "Invalid UserName"}) 
+   
 
 @app.route("/Categories/<string:userName>", methods = ['GET'])
 def categories(userName):
