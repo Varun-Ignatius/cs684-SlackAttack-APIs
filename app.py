@@ -74,7 +74,7 @@ def signUp():
     userName = request.json['userName']
     user_pass = request.json['user_pass']
     email = request.json['email']
-    new_user = User(userName, user_pass, email)
+    new_user = User(userName, user_pass, email, False, False, False, False, False, False, False)
     user = User.query.filter(User.userName == userName).all()
     result = user_Schema.dump(user)
     if len(result):
