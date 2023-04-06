@@ -107,6 +107,20 @@ class APITest(unittest.TestCase):
         response = tester.get("/News/category/General")
         self.assertTrue(response.data)
 
+    #check if GET News per category API gives error for invalid categories
+    def test_categorisedNews_InvalidCategory(self):
+        tester = app.test_client(self)
+        response = tester.get("/News/category/xyz")
+        data = json.loads(response.get_data(as_text=True))
+        self.assertEqual(data['code'], 401)
+
+    #check if GET News per category API gives news for valid categories
+    def test_categorisedNews_validCategory(self):
+        tester = app.test_client(self)
+        response = tester.get("/News/category/General")
+        data = json.loads(response.get_data(as_text=True))
+        self.assertEqual(data['status'], 'ok')
+
 
 if __name__ == "__main__":
     unittest.main()
