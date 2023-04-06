@@ -88,5 +88,25 @@ class APITest(unittest.TestCase):
          response = tester.put("/Categories/Jiraya-Sensei", data= json.dumps(data), headers= headers)
          self.assertTrue(response.data)
 
+
+     #check if GET News per category is a valid API
+    def test_categorisedNews_validRoute(self):
+        tester = app.test_client(self)
+        response = tester.get("/News/category/General")
+        self.assertEqual(response.status_code, 200)
+
+    #check if GET News per category API has JSON response
+    def test_categorisedNews_validContenType(self):
+        tester = app.test_client(self)
+        response = tester.get("/News/category/General")
+        self.assertEqual(response.content_type, "application/json")
+
+    #check if GET News per category API does not give empty response
+    def test_categorisedNews_validData(self):
+        tester = app.test_client(self)
+        response = tester.get("/News/category/General")
+        self.assertTrue(response.data)
+
+
 if __name__ == "__main__":
     unittest.main()
