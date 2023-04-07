@@ -21,6 +21,14 @@ class APITest(unittest.TestCase):
         tester = app.test_client(self)
         response = tester.get("/News/Jiraya-Sensei")
         self.assertTrue(response.data)
+    
+    #check if GET News API send error for Invalid Username
+    def test_News_InvalidUser(self):
+        tester = app.test_client(self)
+        response = tester.get("/News/Jir")
+        data = json.loads(response.get_data(as_text=True))
+        self.assertEqual(data['Code'], 401)
+
 
      #check if GET Categories is a valid API
     def test_Categories_validRoute(self):
@@ -92,19 +100,19 @@ class APITest(unittest.TestCase):
      #check if GET News per category is a valid API
     def test_categorisedNews_validRoute(self):
         tester = app.test_client(self)
-        response = tester.get("/News/category/General")
+        response = tester.get("/News/category/general")
         self.assertEqual(response.status_code, 200)
 
     #check if GET News per category API has JSON response
     def test_categorisedNews_validContenType(self):
         tester = app.test_client(self)
-        response = tester.get("/News/category/General")
+        response = tester.get("/News/category/general")
         self.assertEqual(response.content_type, "application/json")
 
     #check if GET News per category API does not give empty response
     def test_categorisedNews_validData(self):
         tester = app.test_client(self)
-        response = tester.get("/News/category/General")
+        response = tester.get("/News/category/general")
         self.assertTrue(response.data)
 
     #check if GET News per category API gives error for invalid categories
@@ -112,14 +120,14 @@ class APITest(unittest.TestCase):
         tester = app.test_client(self)
         response = tester.get("/News/category/xyz")
         data = json.loads(response.get_data(as_text=True))
-        self.assertEqual(data['code'], 401)
+        self.assertEqual(data['Code'], 401)
 
     #check if GET News per category API gives news for valid categories
     def test_categorisedNews_validCategory(self):
         tester = app.test_client(self)
-        response = tester.get("/News/category/General")
+        response = tester.get("/News/category/general")
         data = json.loads(response.get_data(as_text=True))
-        self.assertEqual(data['status'], 'ok')
+        self.assertTrue(data['articles'])
 
 
 if __name__ == "__main__":
