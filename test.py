@@ -127,7 +127,7 @@ class APITest(unittest.TestCase):
         tester = app.test_client(self)
         response = tester.get("/News/category/general")
         data = json.loads(response.get_data(as_text=True))
-        self.assertTrue(data['articles'])
+        self.assertEqual(data['Code'], 200)
 
 
 if __name__ == "__main__":
