@@ -6,7 +6,7 @@ import requests
 from sqlalchemy import extract
 from flask_cors import CORS
 from sqlalchemy import Boolean
-
+import json
 
 
 app = Flask(__name__)
@@ -91,12 +91,31 @@ def news(userName):
    user = User.query.get(userName)
   
    result = user_Category_Schema.dump(user)
+   newsData = ""
    if len(result):
-      response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=4ae22761ac7c4d698eff795df06742f0')
-      return response.json()
+      for category in result.keys():
+        response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category='+ category +'&apiKey=72927323a3274e7e8cbf1807fa3d52b3')
+        responseJson = response.json()
+        temp = json.dumps(responseJson['articles'])
+        temp = temp[1:]
+        temp = temp[:-1]
+        if category == list(result.keys())[0]:
+            newsData = newsData + temp
+             
+        elif newsData[-1] != ',':
+            newsData = newsData + ',' + temp
+        else:
+           newsData = newsData + temp
+      newsData = "{\"articles\":[" + newsData[:-1] + "}]}"
+      newsDict = json.loads(newsData)
+      return jsonify({"Code": 200,
+                      "NewsData":newsDict}) 
+    #   return newsData
    elif userName == "noUser":
-      response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category=general&apiKey=4ae22761ac7c4d698eff795df06742f0')
-      return response.json()
+      response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category=general&apiKey=72927323a3274e7e8cbf1807fa3d52b3')
+      responseJson = response.json()
+      return jsonify({"Code": 200,
+                      "NewsData":responseJson}) 
    else:
        return jsonify({"Code": 401,
         "Message": "Invalid UserName"}) 
@@ -136,6 +155,18 @@ def updateCategories(userName):
     else:
         return jsonify({"Code": 401,
         "Message": "Invalid UserName"}) 
+    
+@app.route("/News/category/<string:category>", methods = ['GET'])
+def categorisedNews(category):
+  
+      if category != "general" and category != "sports" and category != "science" and category != "health" and category != "business" and category != "entertainment" and category != "technology":
+        return jsonify({"Code": 401,
+        "Message": "Invalid category"}) 
+      else:
+       response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category='+ category +'&apiKey=72927323a3274e7e8cbf1807fa3d52b3')
+       responseJson = response.json()
+       return jsonify({"Code": 200,
+                      "NewsData":responseJson}) 
 
 if __name__ == "__main__":
     app.run(debug=True)
