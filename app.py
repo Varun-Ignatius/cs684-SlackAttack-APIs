@@ -93,19 +93,20 @@ def news(userName):
    result = user_Category_Schema.dump(user)
    newsData = ""
    if len(result):
-      for category in result.keys():
-        response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category='+ category +'&apiKey=72927323a3274e7e8cbf1807fa3d52b3')
-        responseJson = response.json()
-        temp = json.dumps(responseJson['articles'])
-        temp = temp[1:]
-        temp = temp[:-1]
-        if category == list(result.keys())[0]:
-            newsData = newsData + temp
-             
-        elif newsData[-1] != ',':
-            newsData = newsData + ',' + temp
-        else:
-           newsData = newsData + temp
+      for category in result:
+        if result.get(category) == True :
+            response = requests.get('https://newsapi.org/v2/top-headlines?country=us&category='+ category +'&apiKey=72927323a3274e7e8cbf1807fa3d52b3')
+            responseJson = response.json()
+            temp = json.dumps(responseJson['articles'])
+            temp = temp[1:]
+            temp = temp[:-1]
+            if newsData == "":
+                newsData = newsData + temp
+                
+            elif newsData[-1] != ',':
+                newsData = newsData + ',' + temp
+            else:
+             newsData = newsData + temp
       newsData = "{\"articles\":[" + newsData[:-1] + "}]}"
       newsDict = json.loads(newsData)
       return jsonify({"Code": 200,
