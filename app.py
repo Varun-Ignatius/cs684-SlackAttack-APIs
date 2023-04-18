@@ -169,5 +169,14 @@ def categorisedNews(category):
        return jsonify({"Code": 200,
                       "NewsData":responseJson}) 
 
+@app.route("/News/search/<string:query>", methods = ['GET'])
+def searchNews(query):
+  
+       response = requests.get('https://newsapi.org/v2/everything?q='+ query +'&sortBy=publishedAt&apiKey=72927323a3274e7e8cbf1807fa3d52b3')
+       responseJson = response.json()
+       return jsonify({"Code": 200,
+                      "NewsData":responseJson}) 
+
+
 if __name__ == "__main__":
     app.run(debug=True)
