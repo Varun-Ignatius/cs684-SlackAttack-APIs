@@ -12,7 +12,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://9mydq7twrs11xmikngyc:pscale_pw_BKggjTt2mzbfaq7DJPPcPjSFRp83w61c5dzrQmBuqn0@aws.connect.psdb.cloud/slackattack-news-usersdatabase?ssl=true'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://zauq3sdruno6bn64tcw2:pscale_pw_T81YgPpkgXlGKozZhcnzTztXaB2sXHobDchiD4ME0Aa@aws.connect.psdb.cloud/slackattack-news-usersdatabase?ssl=true'
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 
 db= SQLAlchemy(app)
